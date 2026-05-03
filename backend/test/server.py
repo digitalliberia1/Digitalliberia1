@@ -6,7 +6,7 @@ try:
 except ImportError:
     load_dotenv = None
 
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import asyncio
@@ -92,8 +92,21 @@ async def lifespan(app: FastAPI):
     yield
     client.close()
 
-
 app = FastAPI(title="Digital Liberia API", lifespan=lifespan)
+
+# Define the origins that are allowed to talk to your backend
+origins = [
+    "http://localhost:3000", # Default for Create React App
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 api_router = APIRouter(prefix="/api")
 
 
