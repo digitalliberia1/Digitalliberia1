@@ -67,9 +67,8 @@ function Nav({ open, setOpen }) {
   return (
     <header className="dl-nav" data-testid="site-nav">
       <a href="#top" className="dl-brand" data-testid="brand-link">
-        <span className="dl-brand-mark" aria-hidden="true">
-          <Star className="dl-brand-star" />
-        </span>
+        <img src="/281229299.png"
+        className="dl-brand-mark" alt="Logo" />
         <span className="dl-brand-text">
           <span className="dl-brand-title">Digital Liberia</span>
           <span className="dl-brand-sub">National Tech Initiative</span>
