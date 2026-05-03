@@ -2,7 +2,7 @@ from fastapi import FastAPI, APIRouter, HTTPException
 from contextlib import asynccontextmanager
 
 try:
-    from dotenv import load_dotenv
+    from dotenv import load_dotenv # pyright: ignore[reportMissingImports]
 except ImportError:
     load_dotenv = None
 
@@ -77,18 +77,25 @@ CONTACT_RECIPIENT = os.environ.get("CONTACT_RECIPIENT", "doeblah004@gmail.com")
 if resend is not None:
     resend.api_key = RESEND_API_KEY
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
+logger = logging.getLogger(__name__)
+
 cors_origins_raw = os.environ.get("CORS_ORIGINS", "*")
 allow_origins = (
     ["*"]
     if cors_origins_raw == "*"
     else [origin.strip() for origin in cors_origins_raw.split(",") if origin.strip()]
 )
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-)
-logger = logging.getLogger(__name__)
+allow_credentials = os.environ.get("CORS_ALLOW_CREDENTIALS", "true").lower() in {"1", "true", "yes"}
+if allow_origins == ["*"] and allow_credentials:
+    logger.warning(
+        "CORS allow_credentials=True is incompatible with wildcard origins ('*'); "
+        "disabling credentials support for CORS."
+    )
+    allow_credentials = False
 
 
 @asynccontextmanager
@@ -101,7 +108,7 @@ app = FastAPI(title="Digital Liberia API", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allow_origins,
-    allow_credentials=True,
+    allow_credentials=allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )
