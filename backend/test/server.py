@@ -84,6 +84,10 @@ allow_origins = (
     else [origin.strip() for origin in cors_origins_raw.split(",") if origin.strip()]
 )
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
 logger = logging.getLogger(__name__)
 
 
@@ -94,14 +98,9 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Digital Liberia API", lifespan=lifespan)
 
-# Define the origins that are allowed to talk to your backend
-origins = [
-    "http://localhost:3000", # Default for Create React App
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=allow_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -801,16 +800,3 @@ async def list_newsletter():
 # ============================================================
 
 app.include_router(api_router)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_credentials=True,
-    allow_origins=allow_origins,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-)

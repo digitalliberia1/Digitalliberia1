@@ -29,15 +29,12 @@ export default function Nav() {
   return (
     <header className={`dl-nav ${scrolled ? "is-scrolled" : ""}`} data-testid="site-nav">
       <Link to="/" className="dl-brand" data-testid="brand-link">
-        <a href="#top" className="dl-brand" data-testid="brand-link">
-        <img src="/281229299.png"
-        className="dl-brand-mark" alt="Logo" />
+        <img src="/281229299.png" className="dl-brand-mark" alt="Logo" />
         <span className="dl-brand-text">
           <span className="dl-brand-title">Digital Liberia</span>
           <span className="dl-brand-sub">National Tech Initiative</span>
         </span>
-        </a>      
-        </Link>
+      </Link>
 
       <nav className={`dl-nav-links ${open ? "is-open" : ""}`} aria-label="Primary">
         <NavLink to="/" end data-testid="nav-home">Home</NavLink>
