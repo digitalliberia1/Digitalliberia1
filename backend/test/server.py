@@ -594,7 +594,7 @@ async def send_email(to_email: str, subject: str, html: str) -> Optional[str]:
             "html": html,
         }
 
-        result = await asyncio.to_thread(resend.Emails.send, params)
+        result = await asyncio.to_thread(resend.emails.send, params)
 
         if isinstance(result, dict):
             return result.get("id")
